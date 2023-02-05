@@ -1,4 +1,4 @@
-package me.ildar.mockito.model;
+package me.ildar.mockito;
 
 import java.util.Objects;
 

@@ -1,14 +1,15 @@
-package me.ildar.mockito.repository;
-
-import me.ildar.mockito.model.User;
+package me.ildar.mockito;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class UserRepository {
-    private List<User> users = new ArrayList<>();
-    private User user;
+    private final List<User> users = new ArrayList<>();
+
+    public UserRepository() {
+    }
+
 
     public List<User> getAllUsers() {
         return new ArrayList<>(users);
@@ -16,21 +17,21 @@ public class UserRepository {
 
     public Optional<User> findUserByLogin(String login) {
         return users.stream()
-                .filter(e -> user.getLogin().equals(login))
+                .filter(e -> e.getLogin().equals(login))
                 .findAny();
     }
 
     public Optional<User> findUserByLoginAndPassword(String login, String password) {
         return users.stream()
-                .filter(e -> user.getLogin().equals(login) && user.getPassword().equals(password))
+                .filter(e -> e.getLogin().equals(login) && e.getPassword().equals(password))
                 .findAny();
     }
+    public void addUser(User user) {
+        users.add(user);
+    }
+
 
     public List<User> getUsers() {
         return users;
-    }
-
-    public void addUser(User user) {
-        users.add(user);
     }
 }

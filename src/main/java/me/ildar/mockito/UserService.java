@@ -1,8 +1,6 @@
-package me.ildar.mockito.service;
+package me.ildar.mockito;
 
 import me.ildar.mockito.exception.UserNonUniqueException;
-import me.ildar.mockito.model.User;
-import me.ildar.mockito.repository.UserRepository;
 
 import java.util.List;
 
@@ -33,6 +31,5 @@ public class UserService {
         List<User> users = userRepository.getUsers();
         return users.stream()
                 .anyMatch(e-> e.getLogin().equals(login)&&e.getPassword().equals(password));
-
     }
 }
