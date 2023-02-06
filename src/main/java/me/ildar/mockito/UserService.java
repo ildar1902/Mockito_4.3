@@ -5,30 +5,42 @@ import me.ildar.mockito.exception.UserNonUniqueException;
 import java.util.List;
 
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<String> getLogins() {
-        List<User> users = userRepository.getUsers();
-        return users.stream()
+
+        return userRepository
+                .getAllUsers()
+                .stream()
                 .map(User::getLogin)
                 .toList();
     }
 
     public void createNewUser(String login, String password) {
-        if (login == null || password == null) {
+        User user = new User(login, password);
+
+        if (login == null || login.isEmpty() || password == null || password.isEmpty()) {
             throw new IllegalArgumentException("поля логин и пароль не должны быть пустыми!");
         }
-        if (userRepository.findUserByLogin(login).isPresent()) {
-            throw new UserNonUniqueException();
+
+        boolean userExist = userRepository
+                .getAllUsers()
+                .stream()
+                .anyMatch(u -> u.equals(user));
+        if (userExist) {
+            throw new UserNonUniqueException("пользователь с таким логином уже существует");
         }
-        if (userRepository.findUserByLogin(login).isEmpty()) {
-            userRepository.addUser(new User(login, password));
-        }
+        userRepository.addUser(user);
     }
 
     public boolean logInUser(String login, String password) {
-        List<User> users = userRepository.getUsers();
-        return users.stream()
+        return this.userRepository
+                .getAllUsers()
+                .stream()
                 .anyMatch(e -> e.getLogin().equals(login) && e.getPassword().equals(password));
     }
 }

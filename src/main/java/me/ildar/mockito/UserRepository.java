@@ -10,7 +10,6 @@ public class UserRepository {
     public UserRepository() {
     }
 
-
     public List<User> getAllUsers() {
         return new ArrayList<>(users);
     }
@@ -26,8 +25,9 @@ public class UserRepository {
                 .filter(e -> e.getLogin().equals(login) && e.getPassword().equals(password))
                 .findAny();
     }
-    public void addUser(User user) {
+    public User addUser(User user) {
         users.add(user);
+        return user;
     }
 
 
