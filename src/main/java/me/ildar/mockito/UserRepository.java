@@ -25,6 +25,7 @@ public class UserRepository {
                 .filter(e -> e.getLogin().equals(login) && e.getPassword().equals(password))
                 .findAny();
     }
+
     public User addUser(User user) {
         users.add(user);
         return user;

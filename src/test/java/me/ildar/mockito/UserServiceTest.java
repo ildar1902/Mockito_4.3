@@ -68,4 +68,10 @@ public class UserServiceTest {
         verify(userRepository).getAllUsers();
         verify(userRepository, never()).addUser(any());
     }
+
+    @Test
+    void logInUserTest() {
+        when(userRepository.getAllUsers()).thenReturn(List.of(user1, user2));
+        assertThat(userService.logInUser("user1", "pass1")).isTrue();
+    }
 }
