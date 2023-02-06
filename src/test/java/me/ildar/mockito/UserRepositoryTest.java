@@ -14,7 +14,10 @@ public class UserRepositoryTest {
     private final User user1 = new User("user1", "pass1");
     private final User user2 = new User("user2", "pass2");
 
-
+    @BeforeEach
+    public void setUp() {
+        userRepository = new UserRepository();
+    }
 
     @Test
     public void getEmptyListUserTest() {
@@ -22,15 +25,11 @@ public class UserRepositoryTest {
         List<User> actual = new ArrayList<>();
         assertEquals(expected, actual);
     }
-    @BeforeEach
-    public void setUp() {
-        userRepository = new UserRepository();
-        userRepository.addUser(user1);
-        userRepository.addUser(user2);
-    }
 
     @Test
     public void getListWithUsersTest() {
+        userRepository.addUser(user1);
+        userRepository.addUser(user2);
         List<User> expected = userRepository.getAllUsers();
         List<User> actual = new ArrayList<>();
         actual.add(user1);
@@ -40,6 +39,8 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserByLoginWhenHasThisUser() {
+        userRepository.addUser(user1);
+        userRepository.addUser(user2);
         Optional<User> expected = userRepository.findUserByLogin("user1");
         List<User> userList = new ArrayList<>();
         userList.add(user1);
@@ -53,6 +54,8 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserByLoginWhenHasNotThisUser() {
+        userRepository.addUser(user1);
+        userRepository.addUser(user2);
         Optional<User> expected = userRepository.findUserByLogin("user3");
         List<User> userList = new ArrayList<>();
         userList.add(user1);
@@ -66,12 +69,14 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserByLoginAndPasswordWhenHasThisUser() {
-        Optional<User> expected = userRepository.findUserByLoginAndPassword("user2","pass2");
+        userRepository.addUser(user1);
+        userRepository.addUser(user2);
+        Optional<User> expected = userRepository.findUserByLoginAndPassword("user2", "pass2");
         List<User> userList = new ArrayList<>();
         userList.add(user1);
         userList.add(user2);
         Optional<User> actual = userList.stream()
-                .filter(e -> e.getLogin().equals("user2")&&e.getPassword().equals("pass2"))
+                .filter(e -> e.getLogin().equals("user2") && e.getPassword().equals("pass2"))
                 .findAny();
 
         assertEquals(expected, actual);
@@ -79,12 +84,14 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserByLoginAndPasswordWhenOnlyPasswordMatches() {
-        Optional<User> expected = userRepository.findUserByLoginAndPassword("user3","pass2");
+        userRepository.addUser(user1);
+        userRepository.addUser(user2);
+        Optional<User> expected = userRepository.findUserByLoginAndPassword("user3", "pass2");
         List<User> userList = new ArrayList<>();
         userList.add(user1);
         userList.add(user2);
         Optional<User> actual = userList.stream()
-                .filter(e -> e.getLogin().equals("user3")&&e.getPassword().equals("pass2"))
+                .filter(e -> e.getLogin().equals("user3") && e.getPassword().equals("pass2"))
                 .findAny();
 
         assertEquals(expected, actual);
@@ -92,12 +99,14 @@ public class UserRepositoryTest {
 
     @Test
     public void findUserByLoginAndPasswordWhenOnlyLoginMatches() {
-        Optional<User> expected = userRepository.findUserByLoginAndPassword("user1","pass4");
+        userRepository.addUser(user1);
+        userRepository.addUser(user2);
+        Optional<User> expected = userRepository.findUserByLoginAndPassword("user1", "pass4");
         List<User> userList = new ArrayList<>();
         userList.add(user1);
         userList.add(user2);
         Optional<User> actual = userList.stream()
-                .filter(e -> e.getLogin().equals("user1")&&e.getPassword().equals("pass10"))
+                .filter(e -> e.getLogin().equals("user1") && e.getPassword().equals("pass10"))
                 .findAny();
 
         assertEquals(expected, actual);

@@ -15,21 +15,20 @@ public class UserService {
     }
 
     public void createNewUser(String login, String password) {
-        List<User> users = userRepository.getUsers();
         if (login == null || password == null) {
             throw new IllegalArgumentException("поля логин и пароль не должны быть пустыми!");
         }
-        for (User user : users) {
-            if (user.getLogin().equals(login)) {
-                throw new UserNonUniqueException();
-            }
+        if (userRepository.findUserByLogin(login).isPresent()) {
+            throw new UserNonUniqueException();
         }
-        userRepository.addUser(new User(login, password));
+        if (userRepository.findUserByLogin(login).isEmpty()) {
+            userRepository.addUser(new User(login, password));
+        }
     }
 
     public boolean logInUser(String login, String password) {
         List<User> users = userRepository.getUsers();
         return users.stream()
-                .anyMatch(e-> e.getLogin().equals(login)&&e.getPassword().equals(password));
+                .anyMatch(e -> e.getLogin().equals(login) && e.getPassword().equals(password));
     }
 }
