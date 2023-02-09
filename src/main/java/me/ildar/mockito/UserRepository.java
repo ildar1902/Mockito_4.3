@@ -30,9 +30,4 @@ public class UserRepository {
         users.add(user);
         return user;
     }
-
-
-    public List<User> getUsers() {
-        return users;
-    }
 }

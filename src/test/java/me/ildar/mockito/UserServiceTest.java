@@ -27,12 +27,14 @@ public class UserServiceTest {
     @Test
     public void getEmptyListLoginTest() {
         when(userRepository.getAllUsers()).thenReturn(List.of());
+
         assertThat(userService.getLogins()).isEqualTo(new ArrayList<String>());
     }
 
     @Test
     public void getNotEmptyListLoginTest() {
         when(userRepository.getAllUsers()).thenReturn(List.of(user1, user2));
+
         assertThat(userService.getLogins()).isEqualTo(List.of(user1.getLogin(), user2.getLogin()));
     }
 
@@ -40,6 +42,7 @@ public class UserServiceTest {
     public void createNewUserTest() {
         when(userRepository.addUser(any(User.class))).thenReturn(user1);
         userService.createNewUser("user1", "pass1");
+
         verify(userRepository).addUser(any());
     }
 
@@ -47,6 +50,7 @@ public class UserServiceTest {
     void whenCreateNewUserReturnNullTest() {
         when(userRepository.addUser(any(User.class))).thenReturn(null);
         userService.createNewUser("user1", "pass1");
+
         verify(userRepository).addUser(any());
     }
 
@@ -55,6 +59,7 @@ public class UserServiceTest {
         assertThatThrownBy(() -> userService.createNewUser("", ""))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("поля логин и пароль не должны быть пустыми!");
+
         verify(userRepository, never()).getAllUsers();
         verify(userRepository, never()).addUser(any());
     }
@@ -65,6 +70,7 @@ public class UserServiceTest {
         assertThatThrownBy(() -> userService.createNewUser("user2", "pass2"))
                 .isInstanceOf(UserNonUniqueException.class)
                 .hasMessage("пользователь с таким логином уже существует");
+
         verify(userRepository).getAllUsers();
         verify(userRepository, never()).addUser(any());
     }
@@ -72,6 +78,7 @@ public class UserServiceTest {
     @Test
     void logInUserTest() {
         when(userRepository.getAllUsers()).thenReturn(List.of(user1, user2));
+
         assertThat(userService.logInUser("user1", "pass1")).isTrue();
     }
 }

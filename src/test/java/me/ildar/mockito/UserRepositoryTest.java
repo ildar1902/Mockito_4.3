@@ -23,6 +23,7 @@ public class UserRepositoryTest {
     public void getEmptyListUserTest() {
         List<User> expected = userRepository.getAllUsers();
         List<User> actual = new ArrayList<>();
+
         assertEquals(expected, actual);
     }
 
@@ -34,6 +35,7 @@ public class UserRepositoryTest {
         List<User> actual = new ArrayList<>();
         actual.add(user1);
         actual.add(user2);
+
         assertEquals(expected, actual);
     }
 
@@ -111,6 +113,4 @@ public class UserRepositoryTest {
 
         assertEquals(expected, actual);
     }
-
-
 }
